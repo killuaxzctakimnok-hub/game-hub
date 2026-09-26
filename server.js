@@ -1,4 +1,5 @@
-const express=require("express"),session=require("express-session"),bcrypt=require("bcryptjs"),fs=require("fs");
+
+const supabase=require("./supabase");const express=require("express"),session=require("express-session"),bcrypt=require("bcryptjs"),fs=require("fs");
 
 const app=express(),PORT=process.env.PORT||3000,DB="./database.json";
 
