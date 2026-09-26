@@ -94,7 +94,7 @@ app.get("/member",auth,(q,r)=>{
 <main class="box">
 <h1>สวัสดี ${u.username} 👋</h1>
 <div class="card">🏆 คะแนน: ${u.score||0}</div>
-<a class="btn" href="/game">🎮 เกม</a>
+<a class="btn" href="/game">🎯 เกมกดเป้า</a><a class="btn" href="/game2">⚡ เกมกดให้ไว</a>
 <a class="btn" href="/leaderboard">🏆 อันดับ</a>
 <form method="post" action="/logout"><button class="danger">ออกจากระบบ</button></form>
 </main>`));
@@ -194,6 +194,46 @@ app.post("/api/score",auth,(q,r)=>{
   r.json({ok:true,total:u.score});
 });
 
+app.get("/game2",auth,(q,r)=>r.send(page("Game 2",`
+<main class="box">
+<h1>⚡ กดให้ไว!</h1>
+<p>รอให้ปุ่มเปลี่ยนเป็นสีเขียว แล้วกดให้เร็วที่สุด</p>
+<div id="status" class="card">กดเริ่มเกมเพื่อเริ่ม</div>
+<button id="start">เริ่มเกม</button>
+<button id="tap" style="display:none;font-size:30px;padding:30px;margin:20px">⚡ กดเลย!</button>
+<p id="result"></p>
+<a class="btn" href="/member">🏠 หน้าสมาชิก</a>
+<script>
+const start=document.getElementById("start"),tap=document.getElementById("tap"),status=document.getElementById("status"),result=document.getElementById("result");
+let started=false,startTime=0,timer;
+start.onclick=()=>{
+  if(started)return;
+  started=true;
+  start.disabled=true;
+  tap.style.display="none";
+  status.textContent="รอ...";
+  const delay=1000+Math.random()*3000;
+  timer=setTimeout(()=>{
+    startTime=performance.now();
+    status.textContent="ตอนนี้!";
+    tap.style.display="inline-block";
+  },delay);
+};
+tap.onclick=async()=>{
+  if(!started)return;
+  const reaction=Math.round(performance.now()-startTime);
+  started=false;
+  tap.style.display="none";
+  start.disabled=false;
+  const score=Math.max(1,Math.min(100,Math.round(1000/reaction*100)));
+  status.textContent="เวลาตอบสนอง: "+reaction+" ms";
+  result.textContent="กำลังบันทึกคะแนน...";
+  const res=await fetch("/api/score",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({score})});
+  const data=await res.json();
+  result.textContent=data.ok?"🎉 ได้ "+score+" คะแนน":"บันทึกคะแนนไม่สำเร็จ";
+};
+</script>
+</main>`)));
 app.get("/leaderboard",auth,(q,r)=>{
   let u=read().users.sort((a,b)=>(b.score||0)-(a.score||0)).slice(0,10);
   const medals=["🥇","🥈","🥉"];
