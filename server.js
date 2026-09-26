@@ -195,16 +195,19 @@ app.post("/api/score",auth,(q,r)=>{
 });
 
 app.get("/leaderboard",auth,(q,r)=>{
-  let u=read().users
-    .sort((a,b)=>(b.score||0)-(a.score||0));
-
+  let u=read().users.sort((a,b)=>(b.score||0)-(a.score||0)).slice(0,10);
+  const medals=["🥇","🥈","🥉"];
   r.send(page("Leaderboard",`
 <main class="box">
-<h1>🏆 อันดับ</h1>
-${u.slice(0,20).map((x,i)=>
-`<div class="card">#${i+1} ${x.username} — ${x.score||0} คะแนน</div>`
-).join("")}
-<a class="btn" href="/member">กลับ</a>
+<h1>🏆 TOP 10</h1>
+<p style="text-align:center;opacity:.7">อันดับผู้เล่นคะแนนสูงสุด</p>
+${u.map((x,i)=>`<div class="card" style="display:flex;align-items:center;gap:12px;margin:10px 0;padding:15px;border-radius:15px">
+<div style="font-size:25px">${medals[i]||"#"+(i+1)}</div>
+<div style="flex:1"><b>${x.username}</b><br><small>อันดับ ${i+1}${x.id===q.session.userId?" 👈 คุณ":""}</small></div>
+<strong>${x.score||0} 🏆</strong>
+</div>`).join("")}
+<a class="btn" href="/game">🎮 เล่นเกม</a>
+<a class="btn" href="/member">🏠 หน้าสมาชิก</a>
 </main>`));
 });
 
