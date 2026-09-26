@@ -70,20 +70,39 @@ app.get("/register",(q,r)=>r.send(page("Register",`
 </main>`)));
 
 app.post("/register",async(q,r)=>{
-  let {username,password}=q.body,d=read();
+  const {username,password}=q.body;
+
   if(!/^[A-Za-z0-9_]{3,24}$/.test(username)||password.length<8)
     return r.status(400).send("ข้อมูลไม่ถูกต้อง");
-  if(d.users.some(x=>x.username===username))
+
+  const {data:existing,error:checkError}=await supabase
+    .from("users")
+    .select("id")
+    .eq("username",username)
+    .maybeSingle();
+
+  if(checkError)
+    return r.status(500).send("เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล");
+
+  if(existing)
     return r.status(409).send("ชื่อผู้ใช้นี้มีแล้ว");
-  let u={
-    id:Date.now().toString(),
-    username,
-    password:await bcrypt.hash(password,8),
-    role:"member",
-    score:0
-  };
-  d.users.push(u);
-  write(d);
+
+  const hashedPassword=await bcrypt.hash(password,8);
+
+  const {data:u,error}=await supabase
+    .from("users")
+    .insert({
+      username,
+      password:hashedPassword,
+      role:"member",
+      score:0
+    })
+    .select("id,username,role,score")
+    .single();
+
+  if(error)
+    return r.status(500).send("สมัครสมาชิกไม่สำเร็จ");
+
   q.session.userId=u.id;
   q.session.role=u.role;
   r.redirect("/member");
