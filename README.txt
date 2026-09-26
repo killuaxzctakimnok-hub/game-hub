@@ -1,0 +1,1 @@
+GAME HUB starter. Run npm install then npm start. Set SESSION_SECRET before public deployment. Admin route is hidden and role-protected; use HTTPS and a real database for production.
