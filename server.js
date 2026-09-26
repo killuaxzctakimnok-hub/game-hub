@@ -95,7 +95,7 @@ app.get("/member",auth,(q,r)=>{
 <h1>สวัสดี ${u.username} 👋</h1>
 <div class="card">🏆 คะแนน: ${u.score||0}</div>
 <a class="btn" href="/game">🎯 เกมกดเป้า</a><a class="btn" href="/game2">⚡ เกมกดให้ไว</a>
-<a class="btn" href="/leaderboard">🏆 อันดับ</a>
+<a class="btn" href="/leaderboard">🏆 อันดับ</a><a class="btn" href="/stats">📊 สถิติ</a>
 <form method="post" action="/logout"><button class="danger">ออกจากระบบ</button></form>
 </main>`));
 });
@@ -234,6 +234,30 @@ tap.onclick=async()=>{
 };
 </script>
 </main>`)));
+app.get("/stats",auth,(q,r)=>{
+  let d=read();
+  let u=d.users.find(x=>x.id===q.session.userId);
+  if(!u)return r.redirect("/login");
+  let scores=d.scores.filter(x=>x.userId===u.id);
+  let total=u.score||0;
+  let plays=scores.length;
+  let average=plays?Math.round(scores.reduce((a,x)=>a+(Number(x.score)||0),0)/plays):0;
+  let ranking=d.users.slice().sort((a,b)=>(b.score||0)-(a.score||0));
+  let rank=ranking.findIndex(x=>x.id===u.id)+1;
+  r.send(page("Statistics",`
+<main class="box">
+<h1>📊 สถิติผู้เล่น</h1>
+<div class="card">👤 ${u.username}</div>
+<div class="card">🏆 คะแนนรวม: <b>${total}</b></div>
+<div class="card">🎮 เล่นทั้งหมด: <b>${plays}</b> ครั้ง</div>
+<div class="card">📈 คะแนนเฉลี่ย: <b>${average}</b> คะแนน/ครั้ง</div>
+<div class="card">🥇 อันดับปัจจุบัน: <b>#${rank}</b></div>
+<a class="btn" href="/game">🎯 เล่นเกม</a>
+<a class="btn" href="/game2">⚡ เกมกดให้ไว</a>
+<a class="btn" href="/leaderboard">🏆 อันดับ</a><a class="btn" href="/stats">📊 สถิติ</a>
+<a class="btn" href="/member">🏠 หน้าสมาชิก</a>
+</main>`));
+});
 app.get("/leaderboard",auth,(q,r)=>{
   let u=read().users.sort((a,b)=>(b.score||0)-(a.score||0)).slice(0,10);
   const medals=["🥇","🥈","🥉"];
