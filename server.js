@@ -33,8 +33,23 @@ const page=(t,b)=>`<!doctype html>
 </style>
 </head>
 <body>${b}</body></html>`;
+const auth=async(q,r,n)=>{
+  if(!q.session.userId)return r.redirect("/login");
 
-const auth=(q,r,n)=>q.session.userId?n():r.redirect("/login");
+  const {data:user,error}=await supabase
+    .from("users")
+    .select("id,username,role,score")
+    .eq("id",q.session.userId)
+    .maybeSingle();
+
+  if(error||!user){
+    return q.session.destroy(()=>r.redirect("/login"));
+  }
+
+  q.session.user=user;
+  q.session.role=user.role;
+  n();
+};
 
 app.get("/",(q,r)=>r.redirect(q.session.userId?"/member":"/login"));
 
@@ -106,10 +121,8 @@ app.post("/register",async(q,r)=>{
   q.session.userId=u.id;
   q.session.role=u.role;
   r.redirect("/member");
-});
-
-app.get("/member",auth,(q,r)=>{
-  let u=read().users.find(x=>x.id===q.session.userId);
+});app.get("/member",auth,(q,r)=>{
+    let u=q.session.user;
   r.send(page("Member",`
 <main class="box">
 <h1>สวัสดี ${u.username} 👋</h1>
