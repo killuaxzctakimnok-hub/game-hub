@@ -66,9 +66,22 @@ app.get("/login",(q,r)=>r.send(page("Login",`
 </main>`)));
 
 app.post("/login",async(q,r)=>{
-  let d=read(),u=d.users.find(x=>x.username===q.body.username);
-  if(!u||!(await bcrypt.compare(q.body.password,u.password)))
+  const {username,password}=q.body;
+
+  const {data:u,error}=await supabase
+    .from("users")
+    .select("id,username,password,role,score")
+    .eq("username",username)
+    .maybeSingle();
+
+  if(error){
+    console.error("LOGIN ERROR:",error);
+    return r.status(500).send("เกิดข้อผิดพลาดในการเข้าสู่ระบบ");
+  }
+
+  if(!u || !(await bcrypt.compare(password,u.password)))
     return r.status(401).send(page("Login",'<main class="box"><h1>เข้าสู่ระบบไม่สำเร็จ</h1><a href="/login">ลองอีกครั้ง</a></main>'));
+
   q.session.userId=u.id;
   q.session.role=u.role;
   r.redirect("/member");
