@@ -66,6 +66,8 @@ app.get("/login",(q,r)=>r.send(page("Login",`
 </main>`)));
 
 app.post("/login",async(q,r)=>{
+console.log("LOGIN REQUEST:",
+q.body.username);
   const {username,password}=q.body;
 
   const {data:u,error}=await supabase
