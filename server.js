@@ -43,7 +43,8 @@ const auth=async(q,r,n)=>{
     .maybeSingle();
 
   if(error||!user){
-    return q.session.destroy(()=>r.redirect("/login"));
+    console.error("AUTH ERROR:",error);
+    return r.status(500).send("AUTH ERROR: "+(error?.message||"ไม่พบผู้ใช้"));
   }
 
   q.session.user=user;
