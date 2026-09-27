@@ -3,117 +3,545 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>GAME HUB</title>
+  <title>VOIDARK</title>
   <link rel="stylesheet" href="/style.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-family: Arial, "Noto Sans Thai", sans-serif;
+      background: #030711;
+      color: #fff;
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    .voidark-page {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 75% 35%, rgba(35,105,255,.18), transparent 30%),
+        radial-gradient(circle at 20% 75%, rgba(30,70,160,.12), transparent 35%),
+        linear-gradient(135deg, #02050c 0%, #06101e 55%, #02050b 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .voidark-page::before {
+      content: "";
+      position: absolute;
+      width: 650px;
+      height: 650px;
+      right: -260px;
+      top: 120px;
+      border: 1px solid rgba(64,132,255,.28);
+      border-radius: 50%;
+      box-shadow:
+        0 0 80px rgba(30,105,255,.12),
+        inset 0 0 80px rgba(30,105,255,.06);
+      pointer-events: none;
+    }
+
+    .voidark-page::after {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      right: 70px;
+      top: 250px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(20,75,180,.16), transparent 68%);
+      pointer-events: none;
+    }
+.topbar {
+      height: 82px;
+      padding: 0 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(2,6,14,.72);
+      backdrop-filter: blur(14px);
+      position: relative;
+      z-index: 20;
+    }
+
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .menu-btn {
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 12px;
+      background: rgba(255,255,255,.03);
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .menu-btn:hover {
+      border-color: #4f82ff;
+      background: rgba(60,110,255,.12);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border: 2px solid #4d82ff;
+      transform: rotate(45deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 0 20px rgba(50,115,255,.25);
+    }
+
+    .brand-mark::after {
+      content: "V";
+      transform: rotate(-45deg);
+      font-size: 21px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .brand-name {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 6px;
+    }
+
+    .brand-sub {
+      display: block;
+      font-size: 8px;
+      letter-spacing: 4px;
+      color: #73809a;
+      margin-top: 4px;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .nav-login,
+    .nav-register {
+      text-decoration: none;
+      color: #fff;
+      padding: 12px 22px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .nav-login {
+      border: 1px solid rgba(255,255,255,.25);
+      background: rgba(255,255,255,.02);
+    }
+
+    .nav-register {
+      background: linear-gradient(135deg, #3d73ff, #5b9aff);
+      box-shadow: 0 10px 30px rgba(45,105,255,.2);
+    }
+
+    .hero {
+      min-height: calc(100vh - 82px);
+      padding: 80px 7% 100px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-content {
+      max-width: 680px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .mini-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: #75a1ff;
+      font-size: 14px;
+      letter-spacing: 2px;
+      margin-bottom: 22px;
+    }
+
+    .mini-title::before {
+      content: "";
+      width: 45px;
+      height: 1px;
+      background: #5d8fff;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(58px, 10vw, 125px);
+      line-height: .86;
+      letter-spacing: -5px;
+      font-weight: 900;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(90deg, #fff, #4d8aff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+  .hero-title-th {
+      margin: 35px 0 12px;
+      font-size: clamp(25px, 4vw, 42px);
+      font-weight: 700;
+    }
+
+    .hero-desc {
+      max-width: 580px;
+      color: #8793a9;
+      font-size: 17px;
+      line-height: 1.8;
+      margin-bottom: 34px;
+    }
+
+    .start-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      padding: 17px 32px;
+      border-radius: 14px;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 800;
+      background: linear-gradient(135deg, #3975ff, #5d9bff);
+      box-shadow: 0 18px 45px rgba(45,105,255,.28);
+      transition: .2s;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 22px 55px rgba(45,105,255,.4);
+    }
+
+    .start-arrow {
+      font-size: 22px;
+    }
+
+    .side-glow {
+      position: absolute;
+      right: 8%;
+      top: 18%;
+      width: 430px;
+      height: 560px;
+      border-radius: 50%;
+      background: radial-gradient(
+        ellipse,
+        rgba(34,103,255,.22) 0%,
+        rgba(15,55,130,.08) 38%,
+        transparent 70%
+      );
+      filter: blur(10px);
+      pointer-events: none;
+    }
+
+    .side-orb {
+      position: absolute;
+      right: 12%;
+      top: 25%;
+      width: 300px;
+      height: 300px;
+      border: 1px solid rgba(75,135,255,.2);
+      border-radius: 50%;
+      box-shadow: 0 0 80px rgba(40,105,255,.08);
+      pointer-events: none;
+    }
+
+    .scroll {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #68758b;
+      font-size: 10px;
+      letter-spacing: 4px;
+      z-index: 5;
+    }
+
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: -310px;
+      width: 290px;
+      height: 100vh;
+      background: rgba(4,9,18,.97);
+      border-right: 1px solid rgba(255,255,255,.1);
+      backdrop-filter: blur(20px);
+      z-index: 100;
+      padding: 28px;
+      transition: left .25s ease;
+    }
+
+    .side-menu.open {
+      left: 0;
+    }
+
+    .side-menu h2 {
+      margin: 5px 0 30px;
+      letter-spacing: 3px;
+    }
+
+    .side-menu a,
+    .setting-btn {
+      display: block;
+      width: 100%;
+      padding: 15px 16px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      color: #dce5f7;
+      text-decoration: none;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.06);
+      text-align: left;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .side-menu a:hover,
+    .setting-btn:hover {
+      background: rgba(65,120,255,.12);
+      border-color: rgba(75,135,255,.3);
+    }
+
+    .close-menu {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      background: none;
+      border: 0;
+      color: #fff;
+      font-size: 25px;
+      cursor: pointer;
+    }
+
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      z-index: 90;
+      display: none;
+    }
+
+    .menu-overlay.show {
+      display: block;
+    }
+
+ @media (max-width: 700px) {
+      .topbar {
+        height: 72px;
+        padding: 0 18px;
+      }
+
+      .top-left {
+        gap: 12px;
+      }
+
+      .brand-name {
+        font-size: 17px;
+        letter-spacing: 4px;
+      }
+
+      .brand-sub {
+        font-size: 6px;
+        letter-spacing: 2px;
+      }
+
+      .brand-mark {
+        width: 32px;
+        height: 32px;
+      }
+
+      .nav-actions {
+        gap: 6px;
+      }
+
+      .nav-login,
+      .nav-register {
+        padding: 9px 11px;
+        font-size: 11px;
+      }
+
+      .hero {
+        min-height: calc(100vh - 72px);
+        padding: 65px 25px 100px;
+        align-items: flex-start;
+      }
+
+      .hero h1 {
+        font-size: clamp(54px, 17vw, 85px);
+        letter-spacing: -4px;
+      }
+
+      .hero-title-th {
+        font-size: 26px;
+        margin-top: 28px;
+      }
+
+      .hero-desc {
+        font-size: 14px;
+        line-height: 1.7;
+      }
+
+      .side-glow {
+        right: -100px;
+        top: 35%;
+        width: 350px;
+        height: 450px;
+      }
+
+      .side-orb {
+        right: -80px;
+        top: 38%;
+        width: 280px;
+        height: 280px;
+      }
+
+      .scroll {
+        display: none;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<header class="nav">
-  <div class="logo">🎮 GAME<span>HUB</span></div>
-  <div class="nav-links">
+<div class="voidark-page">
+
+  <header class="topbar">
+
+    <div class="top-left">
+
+      <button class="menu-btn" id="menuBtn" aria-label="เปิดเมนู">
+        ☰
+      </button>
+
+      <a href="/" class="brand">
+        <div class="brand-mark"></div>
+        <div>
+          <div class="brand-name">VOIDARK</div>
+          <span class="brand-sub">PLAY • SCORE • RANK</span>
+        </div>
+      </a>
+
+    </div>
+
+    <nav class="nav-actions">
+      <a class="nav-login" href="/login">เข้าสู่ระบบ</a>
+      <a class="nav-register" href="/register">สมัครสมาชิก</a>
+    </nav>
+
+  </header>
+
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+  <aside class="side-menu" id="sideMenu">
+
+    <button class="close-menu" id="closeMenu">×</button>
+
+    <h2>VOIDARK</h2>
+
+    <a href="/">หน้าหลัก</a>
     <a href="/login">เข้าสู่ระบบ</a>
-    <a class="nav-btn" href="/register">สมัครสมาชิก</a>
-  </div>
-</header>
+    <a href="/register">สมัครสมาชิก</a>
 
-<main>
+    <button class="setting-btn" onclick="alert('เมนูตั้งค่าจะเพิ่มในขั้นต่อไป')">
+      ⚙️ ตั้งค่า
+    </button>
 
-<section class="hero">
-  <div class="hero-content">
-    <div class="badge">⚡ NEXT LEVEL GAMING</div>
-    <h1>PLAY.<br><span>COMPETE.</span><br>LEVEL UP.</h1>
-    <p>
-      ศูนย์รวมเกมสนุก ๆ แข่งขันคะแนน
-      และสร้างสถิติของคุณเอง
-    </p>
+  </aside>
 
-    <div class="hero-buttons">
-      <a class="primary-btn" href="/register">🚀 เริ่มเล่น</a>
-      <a class="secondary-btn" href="/login">เข้าสู่ระบบ</a>
-    </div>
-  </div>
+  <main>
 
-  <div class="hero-card">
-    <div class="orb">🎮</div>
-    <div class="hero-card-title">GAME HUB</div>
-    <div class="hero-card-sub">PLAY • SCORE • RANK</div>
-  </div>
-</section>
+   <section class="hero">
 
-<section class="section">
-  <div class="section-title">
-    <div>
-      <small>DISCOVER</small>
-      <h2>เกมแนะนำ</h2>
-    </div>
-  </div>
+      <div class="side-glow"></div>
+      <div class="side-orb"></div>
 
-  <div class="games">
+      <div class="hero-content">
 
-    <div class="game-card">
-      <div class="game-icon">🎯</div>
-      <div>
-        <h3>Aim Rush</h3>
-        <p>กดเป้าให้เร็วที่สุด</p>
+        <div class="mini-title">
+          ศูนย์รวมเกมสนุก ๆ
+        </div>
+
+        <h1>
+          VOID<span>ARK</span>
+        </h1>
+
+        <div class="hero-title-th">
+          เล่น สนุก แข่งขัน เก็บสถิติ
+        </div>
+
+        <p class="hero-desc">
+          พื้นที่สำหรับคนที่ชอบเกม ไม่ว่าจะเป็นมือใหม่
+          หรือสายจริงจัง ที่นี่คือพื้นที่ของคุณ
+        </p>
+
+        <a class="start-btn" href="/register">
+          เริ่มต้นเลย
+          <span class="start-arrow">→</span>
+        </a>
+
       </div>
-      <span>PLAY</span>
-    </div>
 
-    <div class="game-card">
-      <div class="game-icon">⚡</div>
-      <div>
-        <h3>Reaction</h3>
-        <p>ทดสอบความเร็วในการตอบสนอง</p>
+      <div class="scroll">
+        SCROLL DOWN
       </div>
-      <span>PLAY</span>
-    </div>
 
-    <div class="game-card">
-      <div class="game-icon">🧠</div>
-      <div>
-        <h3>Coming Soon</h3>
-        <p>เกมใหม่กำลังมา</p>
-      </div>
-      <span>SOON</span>
-    </div>
+    </section>
 
-  </div>
-</section>
+  </main>
 
-<section class="stats">
-  <div>
-    <strong>2+</strong>
-    <span>เกม</span>
-  </div>
+</div>
 
-  <div>
-    <strong>∞</strong>
-    <span>ความสนุก</span>
-  </div>
+<script>
+  const menuBtn = document.getElementById("menuBtn");
+  const closeMenu = document.getElementById("closeMenu");
+  const sideMenu = document.getElementById("sideMenu");
+  const menuOverlay = document.getElementById("menuOverlay");
 
-  <div>
-    <strong>🏆</strong>
-    <span>แข่งขันคะแนน</span>
-  </div>
-</section>
+  function openMenu() {
+    sideMenu.classList.add("open");
+    menuOverlay.classList.add("show");
+  }
 
-<section class="cta">
-  <div>
-    <small>READY?</small>
-    <h2>พร้อมขึ้นอันดับหรือยัง?</h2>
-    <p>สมัครสมาชิกแล้วเริ่มสร้างสถิติของคุณ</p>
-  </div>
+  function closeSideMenu() {
+    sideMenu.classList.remove("open");
+    menuOverlay.classList.remove("show");
+  }
 
-  <a class="primary-btn" href="/register">สมัครสมาชิก →</a>
-</section>
-
-</main>
-
-<footer>
-  <div>🎮 GAME HUB</div>
-  <span>PLAY • COMPETE • LEVEL UP</span>
-</footer>
+  menuBtn.addEventListener("click", openMenu);
+  closeMenu.addEventListener("click", closeSideMenu);
+  menuOverlay.addEventListener("click", closeSideMenu);
+</script>
 
 </body>
 </html>
