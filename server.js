@@ -97,7 +97,7 @@ app.post("/register",async(q,r)=>{
     .eq("username",username)
     .maybeSingle();
 
-  if(checkError)
+  if(checkError){ console.error("CHECK USER ERROR:",checkError); return r.status(500).send("เกิดข้อผิดพลาด: "+checkError.message); }
     return r.status(500).send("เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล");
 
   if(existing)
