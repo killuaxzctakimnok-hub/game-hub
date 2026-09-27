@@ -85,6 +85,7 @@ app.get("/register",(q,r)=>r.send(page("Register",`
 </main>`)));
 
 app.post("/register",async(q,r)=>{
+  console.log("REGISTER REQUEST RECEIVED", q.body);
   const {username,password}=q.body;
 
   if(!/^[A-Za-z0-9_]{3,24}$/.test(username)||password.length<8)
