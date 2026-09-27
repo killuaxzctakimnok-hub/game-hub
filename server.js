@@ -116,7 +116,7 @@ app.post("/register",async(q,r)=>{
     .single();
 
   if(error)
-    return r.status(500).send("สมัครสมาชิกไม่สำเร็จ");
+  if(error){ console.error("REGISTER ERROR:",error); return r.status(500).send("สมัครสมาชิกไม่สำเร็จ: "+error.message); }
 
   q.session.userId=u.id;
   q.session.role=u.role;
