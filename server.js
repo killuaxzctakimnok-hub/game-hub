@@ -103,11 +103,13 @@ app.get("/register",(q,r)=>r.send(page("Register",`
 </main>`)));
 
 app.post("/register",async(q,r)=>{
-  console.log("REGISTER REQUEST RECEIVED", { username: q.body.username });
+  console.log("REGISTER REQUEST:", q.body.username);
+
   const {username,password}=q.body;
 
-  if(!/^[A-Za-z0-9_]{3,24}$/.test(username)||password.length<8)
+  if(!/^[A-Za-z0-9_]{3,24}$/.test(username)||password.length<8){
     return r.status(400).send("ข้อมูลไม่ถูกต้อง");
+  }
 
   const {data:existing,error:checkError}=await supabase
     .from("users")
@@ -115,11 +117,14 @@ app.post("/register",async(q,r)=>{
     .eq("username",username)
     .maybeSingle();
 
-  if(checkError){ console.error("CHECK USER ERROR:",checkError); return r.status(500).send("เกิดข้อผิดพลาด: "+checkError.message); }
-    return r.status(500).send("เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล");
+  if(checkError){
+    console.error("REGISTER CHECK ERROR:",checkError);
+    return r.status(500).send("ตรวจสอบผู้ใช้ไม่สำเร็จ: "+checkError.message);
+  }
 
-  if(existing)
+  if(existing){
     return r.status(409).send("ชื่อผู้ใช้นี้มีแล้ว");
+  }
 
   const hashedPassword=await bcrypt.hash(password,8);
 
@@ -134,14 +139,20 @@ app.post("/register",async(q,r)=>{
     .select("id,username,role,score")
     .single();
 
-console.log("REGISTER RESULT:", { user: !!u, error: error?.message });
+  if(error){
+    console.error("REGISTER INSERT ERROR:",error);
+    return r.status(500).send("สมัครสมาชิกไม่สำเร็จ: "+error.message);
+  }
 
-  if(error){ console.error("REGISTER ERROR:",error); return r.status(500).send("สมัครสมาชิกไม่สำเร็จ: "+error.message); }
+  console.log("REGISTER SUCCESS:",u.username);
 
   q.session.userId=u.id;
   q.session.role=u.role;
+
   r.redirect("/member");
-});app.get("/member",auth,(q,r)=>{
+});
+
+app.get("/member",auth,(q,r)=>{
     let u=q.session.user;
   r.send(page("Member",`
 <main class="box">
