@@ -135,7 +135,7 @@ app.get("/login",(q,r)=>r.send(page("Login",`
   <div class="auth-card">
     <div class="auth-logo">
       <div class="icon">🎮</div>
-      <h1>GAME HUB</h1>
+      <h1>VOIDARK</h1>
       <p>เล่นเกม เก็บคะแนน แข่งขันกับเพื่อน</p>
     </div>
 
@@ -268,7 +268,7 @@ app.get("/register",(q,r)=>r.send(page("Register",`
   <div class="auth-card">
     <div class="auth-logo">
       <div class="icon">🎮</div>
-      <h1>GAME HUB</h1>
+      <h1>VOIDARK</h1>
       <p>สร้างบัญชีแล้วมาเล่นกัน</p>
     </div>
 
@@ -345,7 +345,7 @@ app.get("/member",auth,(q,r)=>{
 
   r.send(page("Game Hub",`
 <main class="box">
-  <h1>🎮 GAME HUB</h1>
+  <h1>🎮 VOIDARK</h1>
   <h2>สวัสดี ${user.username} 👋</h2>
   <p class="score">🏆 คะแนน: ${user.score||0}</p>
 
@@ -424,4 +424,4 @@ app.get("/member",auth,(q,r)=>{
 `));
 });
 
-app.listen(PORT,"0.0.0.0",()=>console.log("GAME HUB READY on port "+PORT));
+app.listen(PORT,"0.0.0.0",()=>console.log("VOIDARK READY on port "+PORT));
