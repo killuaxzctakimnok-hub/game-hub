@@ -76,6 +76,8 @@ q.body.username);
     .eq("username",username)
     .maybeSingle();
 
+console.log("LOGIN USER FOUND:", !!u);
+
   if(error){
     console.error("LOGIN ERROR:",error);
     return r.status(500).send("เกิดข้อผิดพลาดในการเข้าสู่ระบบ");
@@ -101,7 +103,7 @@ app.get("/register",(q,r)=>r.send(page("Register",`
 </main>`)));
 
 app.post("/register",async(q,r)=>{
-  console.log("REGISTER REQUEST RECEIVED", q.body);
+  console.log("REGISTER REQUEST RECEIVED", { username: q.body.username });
   const {username,password}=q.body;
 
   if(!/^[A-Za-z0-9_]{3,24}$/.test(username)||password.length<8)
