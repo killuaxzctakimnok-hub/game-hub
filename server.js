@@ -55,15 +55,105 @@ const auth=async(q,r,n)=>{
 app.get("/",(q,r)=>r.redirect(q.session.userId?"/member":"/login"));
 
 app.get("/login",(q,r)=>r.send(page("Login",`
-<main class="box">
-<h1>🔐 เข้าสู่ระบบ</h1>
-<form method="post">
-<input name="username" placeholder="ชื่อผู้ใช้" required>
-<input name="password" type="password" placeholder="รหัสผ่าน" required>
-<button>เข้าสู่ระบบ</button>
-</form>
-<p>ยังไม่มีบัญชี? <a href="/register">สมัครสมาชิก</a></p>
-</main>`)));
+<style>
+.auth-page{
+  min-height:75vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:30px 15px;
+}
+.auth-card{
+  width:100%;
+  max-width:390px;
+  background:#fff;
+  color:#222;
+  border-radius:24px;
+  padding:30px 24px;
+  box-shadow:0 15px 40px rgba(0,0,0,.25);
+  box-sizing:border-box;
+}
+.auth-logo{
+  text-align:center;
+  margin-bottom:22px;
+}
+.auth-logo .icon{
+  font-size:48px;
+}
+.auth-logo h1{
+  margin:5px 0 0;
+  font-size:30px;
+}
+.auth-logo p{
+  margin:5px 0 0;
+  color:#777;
+}
+.auth-card h2{
+  text-align:center;
+  margin:0 0 22px;
+}
+.auth-card form{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.auth-card input{
+  width:100%;
+  box-sizing:border-box;
+  padding:14px 15px;
+  border:1px solid #ddd;
+  border-radius:12px;
+  font-size:16px;
+  outline:none;
+}
+.auth-card input:focus{
+  border-color:#667eea;
+}
+.auth-card button{
+  border:0;
+  border-radius:12px;
+  padding:14px;
+  background:#222;
+  color:#fff;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.auth-link{
+  text-align:center;
+  margin:20px 0 0;
+  color:#666;
+}
+.auth-link a{
+  font-weight:bold;
+  color:#536dfe;
+  text-decoration:none;
+}
+</style>
+
+<main class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="icon">🎮</div>
+      <h1>GAME HUB</h1>
+      <p>เล่นเกม เก็บคะแนน แข่งขันกับเพื่อน</p>
+    </div>
+
+    <h2>🔐 เข้าสู่ระบบ</h2>
+
+    <form method="post">
+      <input name="username" placeholder="ชื่อผู้ใช้" required>
+      <input name="password" type="password" placeholder="รหัสผ่าน" required>
+      <button type="submit">เข้าสู่ระบบ</button>
+    </form>
+
+    <p class="auth-link">
+      ยังไม่มีบัญชี?
+      <a href="/register">สมัครสมาชิก</a>
+    </p>
+  </div>
+</main>
+`)));
 
 app.post("/login",async(q,r)=>{
 console.log("LOGIN REQUEST:",
@@ -92,15 +182,113 @@ console.log("LOGIN USER FOUND:", !!u);
 });
 
 app.get("/register",(q,r)=>r.send(page("Register",`
-<main class="box">
-<h1>📝 สมัครสมาชิก</h1>
-<form method="post">
-<input name="username" placeholder="ชื่อผู้ใช้ 3-24 ตัว" required>
-<input name="password" type="password" placeholder="รหัสผ่านอย่างน้อย 8 ตัว" required>
-<button>สมัครสมาชิก</button>
-</form>
-<p><a href="/login">กลับเข้าสู่ระบบ</a></p>
-</main>`)));
+<style>
+.auth-page{
+  min-height:75vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:30px 15px;
+}
+.auth-card{
+  width:100%;
+  max-width:390px;
+  background:#fff;
+  color:#222;
+  border-radius:24px;
+  padding:30px 24px;
+  box-shadow:0 15px 40px rgba(0,0,0,.25);
+  box-sizing:border-box;
+}
+.auth-logo{
+  text-align:center;
+  margin-bottom:22px;
+}
+.auth-logo .icon{
+  font-size:48px;
+}
+.auth-logo h1{
+  margin:5px 0 0;
+  font-size:30px;
+}
+.auth-logo p{
+  margin:5px 0 0;
+  color:#777;
+}
+.auth-card h2{
+  text-align:center;
+  margin:0 0 22px;
+}
+.auth-card form{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.auth-card input{
+  width:100%;
+  box-sizing:border-box;
+  padding:14px 15px;
+  border:1px solid #ddd;
+  border-radius:12px;
+  font-size:16px;
+  outline:none;
+}
+.auth-card input:focus{
+  border-color:#667eea;
+}
+.auth-card button{
+  border:0;
+  border-radius:12px;
+  padding:14px;
+  background:#222;
+  color:#fff;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.auth-link{
+  text-align:center;
+  margin:20px 0 0;
+  color:#666;
+}
+.auth-link a{
+  font-weight:bold;
+  color:#536dfe;
+  text-decoration:none;
+}
+.hint{
+  text-align:center;
+  color:#888;
+  font-size:13px;
+  margin-top:12px;
+}
+</style>
+
+<main class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="icon">🎮</div>
+      <h1>GAME HUB</h1>
+      <p>สร้างบัญชีแล้วมาเล่นกัน</p>
+    </div>
+
+    <h2>📝 สมัครสมาชิก</h2>
+
+    <form method="post">
+      <input name="username" placeholder="ชื่อผู้ใช้ 3-24 ตัว" required>
+      <input name="password" type="password" placeholder="รหัสผ่านอย่างน้อย 8 ตัว" required>
+      <button type="submit">สมัครสมาชิก</button>
+    </form>
+
+    <p class="auth-link">
+      มีบัญชีอยู่แล้ว?
+      <a href="/login">เข้าสู่ระบบ</a>
+    </p>
+
+    <p class="hint">ใช้ตัวอักษรภาษาอังกฤษ ตัวเลข หรือ _</p>
+  </div>
+</main>
+`)));
 
 app.post("/register",async(q,r)=>{
   console.log("REGISTER REQUEST:", q.body.username);
