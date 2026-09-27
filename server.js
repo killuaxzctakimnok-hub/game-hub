@@ -116,7 +116,6 @@ app.post("/register",async(q,r)=>{
     .select("id,username,role,score")
     .single();
 
-  if(error)
   if(error){ console.error("REGISTER ERROR:",error); return r.status(500).send("สมัครสมาชิกไม่สำเร็จ: "+error.message); }
 
   q.session.userId=u.id;
