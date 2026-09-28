@@ -58,6 +58,8 @@ app.get("/login",(q,r)=>r.send(page("Login",`
 <style>
 .auth-page{
   min-height:75vh;
+  background:#050914;
+  border-radius:20px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -66,8 +68,8 @@ app.get("/login",(q,r)=>r.send(page("Login",`
 .auth-card{
   width:100%;
   max-width:390px;
-  background:#fff;
-  color:#222;
+  background:#080f1e;
+  color:#fff;
   border-radius:24px;
   padding:30px 24px;
   box-shadow:0 15px 40px rgba(0,0,0,.25);
@@ -134,9 +136,9 @@ app.get("/login",(q,r)=>r.send(page("Login",`
 <main class="auth-page">
   <div class="auth-card">
     <div class="auth-logo">
-      <div class="icon">🎮</div>
+      <div class="v-logo">V</div>
       <h1>VOIDARK</h1>
-      <p>เล่นเกม เก็บคะแนน แข่งขันกับเพื่อน</p>
+      <p>PLAY • SCORE • RANK</p>
     </div>
 
     <h2>🔐 เข้าสู่ระบบ</h2>
@@ -193,8 +195,8 @@ app.get("/register",(q,r)=>r.send(page("Register",`
 .auth-card{
   width:100%;
   max-width:390px;
-  background:#fff;
-  color:#222;
+  background:#080f1e;
+  color:#fff;
   border-radius:24px;
   padding:30px 24px;
   box-shadow:0 15px 40px rgba(0,0,0,.25);
@@ -267,12 +269,12 @@ app.get("/register",(q,r)=>r.send(page("Register",`
 <main class="auth-page">
   <div class="auth-card">
     <div class="auth-logo">
-      <div class="icon">🎮</div>
+      <div class="v-logo">V</div>
       <h1>VOIDARK</h1>
-      <p>สร้างบัญชีแล้วมาเล่นกัน</p>
+      <p>JOIN VOIDARK</p>
     </div>
 
-    <h2>📝 สมัครสมาชิก</h2>
+    <h2>📝 สร้างบัญชี</h2>
 
     <form method="post">
       <input name="username" placeholder="ชื่อผู้ใช้ 3-24 ตัว" required>
@@ -311,7 +313,7 @@ app.post("/register",async(q,r)=>{
   }
 
   if(existing){
-    return r.status(409).send("ชื่อผู้ใช้นี้มีแล้ว");
+    return r.status(409).send(page("Register","\n<style>\n.auth-page{\n  min-height:75vh;\n  display:flex;\n  align-items:center;\n  justify-content:center;\n  padding:30px 15px;\n}\n.auth-card{\n  width:100%;\n  max-width:390px;\n  background:#080f1e;\n  color:#fff;\n  border-radius:24px;\n  padding:30px 24px;\n  box-shadow:0 15px 40px rgba(0,0,0,.25);\n  box-sizing:border-box;\n}\n.auth-logo{\n  text-align:center;\n  margin-bottom:22px;\n}\n.auth-logo .icon{\n  font-size:48px;\n}\n.auth-logo h1{\n  margin:5px 0 0;\n  font-size:30px;\n}\n.auth-logo p{\n  margin:5px 0 0;\n  color:#777;\n}\n.auth-card h2{\n  text-align:center;\n  margin:0 0 22px;\n}\n.auth-card form{\n  display:flex;\n  flex-direction:column;\n  gap:12px;\n}\n.auth-card input{\n  width:100%;\n  box-sizing:border-box;\n  padding:14px 15px;\n  border:1px solid #ddd;\n  border-radius:12px;\n  font-size:16px;\n  outline:none;\n}\n.auth-card input:focus{\n  border-color:#667eea;\n}\n.auth-card button{\n  border:0;\n  border-radius:12px;\n  padding:14px;\n  background:#222;\n  color:#fff;\n  font-size:16px;\n  font-weight:bold;\n  cursor:pointer;\n}\n.auth-link{\n  text-align:center;\n  margin:20px 0 0;\n  color:#666;\n}\n.auth-link a{\n  font-weight:bold;\n  color:#536dfe;\n  text-decoration:none;\n}\n.hint{\n  text-align:center;\n  color:#888;\n  font-size:13px;\n  margin-top:12px;\n}\n</style>\n\n<main class=\"auth-page\">\n  <div class=\"auth-card\">\n    <div class=\"auth-logo\">\n      <div class=\"v-logo\">V</div>\n      <h1>VOIDARK</h1>\n      <p>JOIN VOIDARK</p>\n    </div>\n\n    \n<div style=\"background:#3b1118;color:#ffb4bd;padding:12px 16px;border-radius:12px;text-align:center;margin:0 0 18px;font-weight:bold;line-height:1.5\">\n  ⚠️ ชื่อผู้ใช้นี้มีคนใช้แล้ว<br>\n  <small style=\"font-weight:normal\">ลองใช้ชื่ออื่นดูนะ</small>\n</div>\n    <h2>📝 สร้างบัญชี</h2>\n\n    <form method=\"post\">\n      <input name=\"username\" placeholder=\"ชื่อผู้ใช้ 3-24 ตัว\" required>\n      <input name=\"password\" type=\"password\" placeholder=\"รหัสผ่านอย่างน้อย 8 ตัว\" required>\n      <button type=\"submit\">สมัครสมาชิก</button>\n    </form>\n\n    <p class=\"auth-link\">\n      มีบัญชีอยู่แล้ว?\n      <a href=\"/login\">เข้าสู่ระบบ</a>\n    </p>\n\n    <p class=\"hint\">ใช้ตัวอักษรภาษาอังกฤษ ตัวเลข หรือ _</p>\n  </div>\n</main>\n"));
   }
 
   const hashedPassword=await bcrypt.hash(password,8);
@@ -329,7 +331,10 @@ app.post("/register",async(q,r)=>{
 
   if(error){
     console.error("REGISTER INSERT ERROR:",error);
-    return r.status(500).send("สมัครสมาชิกไม่สำเร็จ: "+error.message);
+    if(error.code==="23505"){
+      return r.status(409).send(page("Register",`<main class="box"><h1>ชื่อผู้ใช้นี้มีคนใช้แล้ว</h1><p>ลองใช้ชื่ออื่นดูนะ</p><a href="/register">กลับไปสมัครสมาชิก</a></main>`));
+    }
+    return r.status(500).send("สมัครสมาชิกไม่สำเร็จ");
   }
 
   console.log("REGISTER SUCCESS:",u.username);
@@ -338,6 +343,12 @@ app.post("/register",async(q,r)=>{
   q.session.role=u.role;
 
   r.redirect("/member");
+});
+
+app.get("/logout",(q,r)=>{
+  q.session.destroy(()=>{
+    r.redirect("/login");
+  });
 });
 
 app.get("/member",auth,(q,r)=>{
